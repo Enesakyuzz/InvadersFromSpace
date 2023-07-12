@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
 
     Camera cam;
     public float width;
-    public float speed = 3f;
+    private float speed = 3f;
 
     bool isShooting;
     float coolDown = 0.5f;
@@ -19,39 +19,41 @@ public class Player : MonoBehaviour
         cam = Camera.main;
         width = ((1 /(cam.WorldToViewportPoint(new Vector3(1,1,0)).x - .5f) / 2) - 0.25f);
     }
-    
+
     void Start()
     {
-    
+        
     }
- 
 
+    
     void Update()
     {
 #if UNITY_EDITOR
         if (Input.GetKey(KeyCode.A) && transform.position.x > -width)
         {
             transform.Translate(Vector2.left * Time.deltaTime * speed);
-        }  
+        }
         if (Input.GetKey(KeyCode.D) && transform.position.x < width)
         {
             transform.Translate(Vector2.right * Time.deltaTime * speed);
-        }   
+        }
         if (Input.GetKey(KeyCode.Space) && !isShooting)
         {
             StartCoroutine(Shoot());
         }
-#endif        
+#endif
     }
 
     private IEnumerator Shoot()
     {
         isShooting = true;
-       // Instantiate(bulletPrefab, transform.position, Quaternion.identity);ü
+
+        //Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         GameObject obj = objectPool.GetPooledObject();
         obj.transform.position = gameObject.transform.position;
         yield return new WaitForSeconds(coolDown);
 
-        isShooting = false;
+        isShooting= false;
     }
+
 }
